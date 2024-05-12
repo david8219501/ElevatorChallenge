@@ -1,131 +1,10 @@
-class Factory {
-    static create_floor(floor_number: number, send_close_elevator: (floor_number:number, current_floor :Floor) => void) {
-        return new Floor(floor_number, send_close_elevator);
-    }
-    
-    static create_elevators() {
-        return new Elevator();
-    }
-}
-
-class Floor {
-    private floor_number: number;
-    buttonElement: HTMLButtonElement;
-    floorElement: HTMLDivElement;
-    flag_button: boolean;
-    private sound: HTMLAudioElement;
-    timerElement: HTMLDivElement;
-
-    constructor(floor_number: number, send_elevator: (floor_number:number, current_floor :Floor) => void, ) {
-        this.floor_number = floor_number;
-        this.floorElement = document.createElement("div");
-        this.floorElement.className = "floor";
-        this.buttonElement = document.createElement("button");
-        this.buttonElement.className = "metal linear";
-        this.buttonElement.textContent = this.floor_number.toString();
-        this.floorElement.appendChild(this.buttonElement);
-        this.timerElement = document.createElement("div");
-        this.timerElement.className = "timer";
-        this.floorElement.appendChild(this.timerElement);
-        this.flag_button = true;
-        this.sound = new Audio('../public/ding.mp3');
-        this.buttonElement.onclick = () => {
-        if (this.flag_button) {
-            this.buttonElement.style.color = "green";
-            send_elevator(floor_number, this);
-            this.flag_button = false;}
-        }; 
-    }
-    
-    floor_release(time_release:number) {
-        setTimeout(() => {
-            console.log(time_release)
-            this.buttonElement.style.color =  "hsla(0,0%,20%,1)";
-            this.playSound();
-            this.flag_button = true;
-            this.playSound();
-        }, time_release * 1000);
-    }
-
-    screen_timer(time) {
-        let intervalId = setInterval(() => {
-            if (time <= 0) {
-                clearInterval(intervalId);
-                this.timerElement.textContent = "";
-            } else {
-                let displayTime = Math.trunc(time); 
-                this.timerElement.textContent = displayTime.toString(); 
-                time = time - 0.1;
-            }
-        }, 100);
-    }
-
-    private playSound() {
-        this.sound.play();
-    }
-}
-
-class Elevator {
-    private lets_floor: number;
-    elevator_img: HTMLImageElement;
-    free_time_elevetor: number;
-    time_coming_to_floor : number;
+import { Floor } from './Floors';
+import { Elevator } from './Elevators';
+import {Factory_floor} from './factorys/Factory_floors';
+import {Factory_elevator} from './factorys/Factory_elevators';
 
 
-    constructor() {
-        this.free_time_elevetor = Date.now();
-        this.time_coming_to_floor = 0
-        this.lets_floor = 0;
-        this.elevator_img = document.createElement("img");
-        this.elevator_img.src = '../public/elv.png';
-        this.elevator_img.className = "elevator";
-    }
-
-    elevator_move(floor_number: number) {
-        let free_elevator: number = this.free_time_elevator() * 1000;
-        let distance :number = this.distance_floors(floor_number);
-        setTimeout(() => {
-            this.elevator_img.style.transition =  `transform ${distance}s ease`;
-            this.elevator_img.style.transform = `translateY(${(-floor_number*110) + 7}px)`;
-        }, free_elevator);
-        this.update_free_time(floor_number);
-        this.lets_floor = floor_number;
-    }
-
-    
-    elevator_available = () => {
-       return this.free_time_elevetor < Date.now();
-    }
-
-    free_time_elevator = () => {
-        let free_time: number = 0; 
-        if (!this.elevator_available()) {
-            free_time = (this.free_time_elevetor - Date.now())/1000;
-        }
-        return free_time;
-    }
-
-    update_free_time = (floor_number: number) => {
-        if (this.elevator_available()) {
-            this.free_time_elevetor = Date.now();
-        }
-        this.free_time_elevetor += (this.distance_floors(floor_number) + 2)*1000;
-    }
-
-    distance_floors = (floor_number: number) => {
-        let distance = Math.abs((floor_number - this.lets_floor)/ 2);
-        return distance;
-    }
-
-    time_coming_floor(floor_number: number){
-        let time_coming: number;
-        time_coming = this.free_time_elevator();
-        time_coming += this.distance_floors(floor_number);
-        return time_coming;
-    } 
-}
-
-class Buildings {
+class Building {
     floors: Floor[];
     elevators: Elevator[];
 
@@ -148,7 +27,7 @@ class Buildings {
             this.screen.appendChild(floorBuildings);
 
             for (let i = 0; i < amount_floors; i++) {
-                let floorInstance = Factory.create_floor(i, this.send_elevator);
+                let floorInstance = Factory_floor.create_floor(i, this.send_elevator);
                 this.floors.push(floorInstance);
                 floorBuildings.appendChild(floorInstance.floorElement);
                 
@@ -163,7 +42,7 @@ class Buildings {
 
             if (amount_floors > 1) {
                 for (let i = 0; i < amount_elevators; i++) {
-                    let elevatorInstance = Factory.create_elevators();
+                    let elevatorInstance = Factory_elevator.create_elevators();
                     this.elevators.push(elevatorInstance);
                     building.appendChild(elevatorInstance.elevator_img);
                 }
@@ -204,7 +83,6 @@ class Buildings {
     
 }
 
-// Create instances of Buildings
-const x = new Buildings(99, 4);
-const y = new Buildings(20, 3);
-const z = new Buildings(15, 4);
+const x = new Building(99, 4);
+const y = new Building(20, 3);
+const z = new Building(15, 4);
