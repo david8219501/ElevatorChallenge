@@ -18,7 +18,7 @@ export class Floor {
         this.timerElement.className = "timer";
         this.floorElement.appendChild(this.timerElement);
         this.flag_button = true;
-        this.sound = new Audio('../public/ding.mp3');
+        this.sound = new Audio('ding.mp3');
         this.buttonElement.onclick = () => {
         if (this.flag_button) {
             this.buttonElement.style.color = "green";
@@ -29,15 +29,18 @@ export class Floor {
     
     floor_release(time_release:number) {
         setTimeout(() => {
-            console.log(time_release)
             this.buttonElement.style.color =  "hsla(0,0%,20%,1)";
             this.playSound();
-            this.flag_button = true;
-            this.playSound();
         }, time_release * 1000);
+
+        setTimeout(() => {
+            this.buttonElement.style.color =  "hsla(0,0%,20%,1)";
+            this.flag_button = true;
+           
+        }, (time_release * 1000) + 2000);
     }
 
-    screen_timer(time) {
+    screen_timer(time:number) {
         let intervalId = setInterval(() => {
             if (time <= 0) {
                 clearInterval(intervalId);

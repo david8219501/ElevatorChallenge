@@ -10,7 +10,7 @@ export class Elevator {
         this.time_coming_to_floor = 0
         this.lets_floor = 0;
         this.elevator_img = document.createElement("img");
-        this.elevator_img.src = '../public/elv.png';
+        this.elevator_img.src = 'elv.png';
         this.elevator_img.className = "elevator";
     }
 

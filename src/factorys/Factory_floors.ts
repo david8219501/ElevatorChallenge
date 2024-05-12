@@ -1,4 +1,4 @@
-import { Floor } from '../Floors';
+import { Floor } from '../Floor';
 
 
 export class Factory_floor {

@@ -1,10 +1,22 @@
-import { Floor } from './Floors';
-import { Elevator } from './Elevators';
-import {Factory_floor} from './factorys/Factory_floors';
-import {Factory_elevator} from './factorys/Factory_elevators';
+import { Floor } from "./Floor";
+import { Elevator } from './Elevator';
+// import {Factory_floor} from './factorys/Factory_floors';
+// import {Factory_elevator} from './factorys/Factory_elevators';
 
 
-class Building {
+class Factory {
+    static create_floor(floor_number: number, send_close_elevator: (floor_number:number, current_floor :Floor) => void) {
+        return new Floor(floor_number, send_close_elevator);
+    }
+    
+    static create_elevators() {
+        return new Elevator();
+    }
+}
+
+
+
+class Buildings {
     floors: Floor[];
     elevators: Elevator[];
 
@@ -16,20 +28,20 @@ class Building {
         this.floors = [];
         this.elevators = []; 
 
-        let floorBuildings = document.createElement("div");
-        floorBuildings.className = "floorBuildings";
-        let building = document.createElement("div");
-        building.className = "building";
+        this.floorBuildings = document.createElement("div");
+        this.floorBuildings.className = "floorBuildings";
+        this.building = document.createElement("div");
+        this.building.className = "building";
 
         const screen = document.getElementById('screen');
         if (screen) {
             this.screen = screen as HTMLDivElement;
-            this.screen.appendChild(floorBuildings);
+            this.screen.appendChild(this.floorBuildings);
 
             for (let i = 0; i < amount_floors; i++) {
-                let floorInstance = Factory_floor.create_floor(i, this.send_elevator);
+                let floorInstance = Factory.create_floor(i, this.send_elevator);
                 this.floors.push(floorInstance);
-                floorBuildings.appendChild(floorInstance.floorElement);
+                this.floorBuildings.appendChild(floorInstance.floorElement);
                 
                 if (i < amount_floors - 1) {
                     let blackLine = document.createElement("div");
@@ -38,17 +50,17 @@ class Building {
                 }
             }
 
-            building.appendChild(floorBuildings);
+            this.building.appendChild(this.floorBuildings);
 
             if (amount_floors > 1) {
                 for (let i = 0; i < amount_elevators; i++) {
-                    let elevatorInstance = Factory_elevator.create_elevators();
+                    let elevatorInstance = Factory.create_elevators();
                     this.elevators.push(elevatorInstance);
-                    building.appendChild(elevatorInstance.elevator_img);
+                    this.building.appendChild(elevatorInstance.elevator_img);
                 }
             }
 
-            screen.appendChild(building);
+            screen.appendChild(this.building);
         } else {
             this.screen = null;
             console.error("Element with id 'screen' not found!");
@@ -83,6 +95,7 @@ class Building {
     
 }
 
-const x = new Building(99, 4);
-const y = new Building(20, 3);
-const z = new Building(15, 4);
+// Create instances of Buildings
+const x = new Buildings(99, 4);
+const y = new Buildings(20, 3);
+const z = new Buildings(15, 4);

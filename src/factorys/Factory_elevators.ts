@@ -1,4 +1,4 @@
-import { Elevator } from '../Elevators';
+import { Elevator } from '../Elevator';
 
 export class Factory_elevator {
     
