@@ -1,15 +1,7 @@
-import { Floor } from "./Floor";
-import { Elevator } from './Elevator';
-
-class Factory {
-    static createFloor(numFloors: number, sendCloseElevator: (numFloors: number, currentFloor: Floor) => void) {
-        return new Floor(numFloors, sendCloseElevator);
-    }
-
-    static createElevator() {
-        return new Elevator();
-    }
-}
+import type { Floor } from "./Floor";
+import type { Elevator } from './Elevator';
+import { Factory_elevator } from './factorys/Factory_elevators';
+import { Factory_floor } from './factorys/Factory_floors';
 
 class Buildings {
     private floors: Floor[];
@@ -32,7 +24,7 @@ class Buildings {
             this.screen.appendChild(this.floorBuildings);
 
             for (let i = 0; i < numFloors; i++) {
-                const floorInstance = Factory.createFloor(i, this.sendElevator);
+                const floorInstance = Factory_floor.createFloors(i, this.sendElevator);
                 this.floors.push(floorInstance);
                 this.floorBuildings.appendChild(floorInstance.floorContainer);
 
@@ -41,13 +33,14 @@ class Buildings {
                     blackLine.className = "blackLine";
                     floorInstance.floorContainer.appendChild(blackLine);
                 }
+                
             }
 
             this.building.appendChild(this.floorBuildings);
 
             if (numFloors > 1) {
                 for (let i = 0; i < numElevators; i++) {
-                    const elevatorInstance = Factory.createElevator();
+                    const elevatorInstance = Factory_elevator.create_elevators();
                     this.elevators.push(elevatorInstance);
                     this.building.appendChild(elevatorInstance.elevatorImg);
                 }
@@ -84,7 +77,6 @@ class Buildings {
     }
 }
 
-// Create instances of Buildings
 const y = new Buildings(20, 3);
 const z = new Buildings(15, 4);
 const j = new Buildings(20, 3);
