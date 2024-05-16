@@ -3,13 +3,10 @@
   align-items: flex-end;
   justify-content: flex-start;
   flex-direction: row;
-  background: linear-gradient(#87a8eb, #B0E0E6);
   background-position: center;
   background-size: cover;
-  overflow-x: auto; 
-  overflow-y: auto; 
-}
 
+}
 
 .building {
   display: flex;
@@ -33,14 +30,12 @@
 }
 
 .elevator {
-
   height:101px;
   background-size: cover; 
   border-radius: 5px;
   margin-left: 5px;
   border: 1px solid rgb(0, 0, 0);      
   transform: translateY(7px);
-
 }
 
 .floor {
@@ -83,7 +78,6 @@
   display: flex;
   flex-direction:column;
   justify-self: start;
-
   width: 100%;
   height: 7px;
   background-color: #3f3445;

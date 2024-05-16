@@ -1,5 +1,8 @@
 import { Settings } from './Settings';
 
+/**
+ * Floor - A class representing a floor in a building.
+ */
 export class Floor {
     private floorButton: HTMLButtonElement;
     private isButtonClicked: boolean;
@@ -7,6 +10,12 @@ export class Floor {
     private timerDisplay: HTMLDivElement;
     public floorContainer: HTMLDivElement;
 
+    /**
+     * Constructs a Floor object.
+     * 
+     * @param numFloors - The floor number.
+     * @param requestElevator - A function to request an elevator.
+     */
     constructor(numFloors: number, requestElevator: (numFloors: number, currentFloor: Floor) => void) {
         this.floorContainer = document.createElement("div");
         this.floorContainer.className = "floor";
@@ -29,7 +38,12 @@ export class Floor {
         };
     }
 
-    processElevatorArrival(arrivalTime: number) {
+    /**
+     * Processes the arrival of the elevator at the floor.
+     * 
+     * @param arrivalTime - The time in seconds until the elevator arrives.
+     */
+    processElevatorArrival(arrivalTime: number): void {
         setTimeout(() => {
             this.floorButton.style.color = Settings.BUTTON_COLOR;
             this.playElevatorSound();
@@ -40,7 +54,12 @@ export class Floor {
         }, (arrivalTime + Settings.FLOOR_WAITING) * Settings.MILLI_SECOND);
     }
 
-    displayTimer(time: number) {
+    /**
+     * Displays a countdown timer showing the time until the elevator arrives.
+     * 
+     * @param time - The time in seconds until the elevator arrives.
+     */
+    displayTimer(time: number): void {
         let intervalId = setInterval(() => {
             if (time <= 0) {
                 clearInterval(intervalId);
@@ -48,12 +67,15 @@ export class Floor {
             } else {
                 const displayTime = Math.trunc(time);
                 this.timerDisplay.textContent = displayTime.toString();
-                time = time - 0.1;
+                time -= 0.1;
             }
         }, 100);
     }
 
-    private playElevatorSound() {
+    /**
+     * Plays the elevator sound.
+     */
+    private playElevatorSound(): void {
         this.elevatorSound.play();
     }
 }

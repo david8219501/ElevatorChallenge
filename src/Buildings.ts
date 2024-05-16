@@ -3,6 +3,9 @@ import type { Elevator } from './Elevator';
 import { Factory_elevators } from './factorys/Factory_elevators';
 import { Factory_floors } from './factorys/Factory_floors';
 
+/**
+ * Buildings - A class representing a building with floors and elevators.
+ */
 class Buildings {
     private floors: Floor[];
     private elevators: Elevator[];
@@ -10,6 +13,12 @@ class Buildings {
     private floorBuildings: HTMLDivElement;
     private building: HTMLDivElement;
 
+    /**
+     * Constructs a Buildings object with the specified number of floors and elevators.
+     * 
+     * @param numFloors - The number of floors in the building.
+     * @param numElevators - The number of elevators in the building.
+     */
     constructor(numFloors: number, numElevators: number) {
         this.floors = [];
         this.elevators = [];
@@ -33,7 +42,6 @@ class Buildings {
                     blackLine.className = "blackLine";
                     floorInstance.floorContainer.appendChild(blackLine);
                 }
-                
             }
 
             this.building.appendChild(this.floorBuildings);
@@ -53,7 +61,13 @@ class Buildings {
         }
     }
 
-    private getClosestElevator = (floorToMove: number) => {
+    /**
+     * Finds the closest elevator to the specified floor.
+     * 
+     * @param floorToMove - The floor to move the elevator to.
+     * @returns The index of the closest elevator.
+     */
+    private getClosestElevator = (floorToMove: number): number => {
         let minTimeComing = this.elevators[0].timeComingFloor(floorToMove);
         let index = 0;
 
@@ -68,7 +82,13 @@ class Buildings {
         return index;
     }
 
-    private sendElevator = (numFloors: number, currentFloor: Floor) => {
+    /**
+     * Sends the closest elevator to the specified floor.
+     * 
+     * @param numFloors - The number of floors in the building.
+     * @param currentFloor - The current floor object requesting the elevator.
+     */
+    private sendElevator = (numFloors: number, currentFloor: Floor): void => {
         const index = this.getClosestElevator(numFloors);
         const timeComing = this.elevators[index].timeComingFloor(numFloors);
         currentFloor.displayTimer(timeComing);
@@ -77,6 +97,7 @@ class Buildings {
     }
 }
 
+// Creating instances of Buildings with different numbers of floors and elevators.
 const y = new Buildings(20, 3);
 const z = new Buildings(15, 4);
 const j = new Buildings(20, 3);
