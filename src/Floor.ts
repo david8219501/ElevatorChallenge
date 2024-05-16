@@ -1,7 +1,6 @@
 import { Settings } from './Settings';
 
 export class Floor {
-    private numFloors: number;
     private floorButton: HTMLButtonElement;
     private isButtonClicked: boolean;
     private elevatorSound: HTMLAudioElement;
@@ -9,7 +8,6 @@ export class Floor {
     public floorContainer: HTMLDivElement;
 
     constructor(numFloors: number, requestElevator: (numFloors: number, currentFloor: Floor) => void) {
-        this.numFloors = numFloors;
         this.floorContainer = document.createElement("div");
         this.floorContainer.className = "floor";
         this.floorButton = document.createElement("button");

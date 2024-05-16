@@ -1,7 +1,7 @@
 import type { Floor } from "./Floor";
 import type { Elevator } from './Elevator';
-import { Factory_elevator } from './factorys/Factory_elevators';
-import { Factory_floor } from './factorys/Factory_floors';
+import { Factory_elevators } from './factorys/Factory_elevators';
+import { Factory_floors } from './factorys/Factory_floors';
 
 class Buildings {
     private floors: Floor[];
@@ -24,7 +24,7 @@ class Buildings {
             this.screen.appendChild(this.floorBuildings);
 
             for (let i = 0; i < numFloors; i++) {
-                const floorInstance = Factory_floor.createFloors(i, this.sendElevator);
+                const floorInstance = Factory_floors.createFloors(i, this.sendElevator);
                 this.floors.push(floorInstance);
                 this.floorBuildings.appendChild(floorInstance.floorContainer);
 
@@ -40,7 +40,7 @@ class Buildings {
 
             if (numFloors > 1) {
                 for (let i = 0; i < numElevators; i++) {
-                    const elevatorInstance = Factory_elevator.create_elevators();
+                    const elevatorInstance = Factory_elevators.create_elevators();
                     this.elevators.push(elevatorInstance);
                     this.building.appendChild(elevatorInstance.elevatorImg);
                 }

@@ -2,14 +2,12 @@ import { Settings } from "./Settings";
 
 export class Elevator {
     private currentFloor: number;
+    private availableTime: number;
     elevatorImg: HTMLImageElement;
-    availableTime: number;
-    travelTime : number;
 
 
     constructor() {
         this.availableTime = Date.now();
-        this.travelTime = 0
         this.currentFloor = 0;
         this.elevatorImg = document.createElement("img");
         this.elevatorImg.src = 'elv.png';
