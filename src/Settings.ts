@@ -22,4 +22,7 @@ export class Settings {
 
     /** Height of the black line between floors in pixels. */
     static readonly BLACK_LINE_HEIGHT = 7; 
+
+    /** The time in seconds for the elevator to travel between floors. */
+    static readonly ELEVATOR_TRAVEL_TIME_SECONDS = 0.5;
 }

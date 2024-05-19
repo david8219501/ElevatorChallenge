@@ -79,7 +79,7 @@ export class Elevator {
      * @returns The calculated distance.
      */
     calculateDistance = (targetFloor: number): number => {
-        const distance = Math.abs((targetFloor - this.currentFloor) / Settings.FLOOR_WAITING);
+        const distance = Math.abs((targetFloor - this.currentFloor) * Settings.ELEVATOR_TRAVEL_TIME_SECONDS);
         return distance;
     }
 
