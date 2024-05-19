@@ -1,7 +1,7 @@
 import type { Floor } from "./Floor";
 import type { Elevator } from './Elevator';
-import { Factory_elevators } from './factorys/Factory_elevators';
-import { Factory_floors } from './factorys/Factory_floors';
+import { FactoryElevators } from './factorys/FactoryElevators';
+import { FactoryFloors } from './factorys/FactoryFloors';
 
 /**
  * Buildings - A class representing a building with floors and elevators.
@@ -33,7 +33,7 @@ class Buildings {
             this.screen.appendChild(this.floorBuildings);
 
             for (let i = 0; i < numFloors; i++) {
-                const floorInstance = Factory_floors.createFloors(i, this.sendElevator);
+                const floorInstance = FactoryFloors.createFloors(i, this.sendElevator);
                 this.floors.push(floorInstance);
                 this.floorBuildings.appendChild(floorInstance.floorContainer);
 
@@ -48,7 +48,7 @@ class Buildings {
 
             if (numFloors > 1) {
                 for (let i = 0; i < numElevators; i++) {
-                    const elevatorInstance = Factory_elevators.create_elevators();
+                    const elevatorInstance = FactoryElevators.createElevators();
                     this.elevators.push(elevatorInstance);
                     this.building.appendChild(elevatorInstance.elevatorImg);
                 }
@@ -100,5 +100,4 @@ class Buildings {
 // Creating instances of Buildings with different numbers of floors and elevators.
 const y = new Buildings(20, 3);
 const z = new Buildings(15, 4);
-const j = new Buildings(20, 3);
-const l = new Buildings(15, 4);
+

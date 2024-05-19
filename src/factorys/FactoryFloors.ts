@@ -1,9 +1,9 @@
 import { Floor } from '../Floor';
 
 /**
- * Factory_floors - A class for creating Floor objects.
+ * FactoryFloors - A class for creating Floor objects.
  */
-export class Factory_floors {
+export class FactoryFloors {
     /**
      * Creates and returns a Floor object.
      * 
