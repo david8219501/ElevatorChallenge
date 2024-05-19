@@ -28,12 +28,15 @@ export class Elevator {
         const free_elevator: number = this.getWaitingTime() * Settings.MILLI_SECOND;
         const distance: number = this.calculateDistance(targetFloor);
         setTimeout(() => {
+            // Apply transition effect to smoothly move the elevator
             this.elevatorImg.style.transition = `transform ${distance}s ease`;
+            // Move the elevator to the target floor
             this.elevatorImg.style.transform = `translateY(${(-targetFloor * Settings.FLOOR_HEIGHT) + Settings.BLACK_LINE_HEIGHT}px)`;
         }, free_elevator);
         this.updateAvailableTime(targetFloor);
         this.currentFloor = targetFloor;
     }
+
 
     /**
      * Checks if the elevator is available.
@@ -60,35 +63,35 @@ export class Elevator {
     /**
      * Updates the available time for the elevator based on the number of floors to travel.
      * 
-     * @param numFloors - The number of floors to travel.
+     * @param targetFloor - The number of floors to travel.
      */
-    updateAvailableTime = (numFloors: number): void => {
+    updateAvailableTime = (targetFloor: number): void => {
         if (this.isElevatorAvailable()) {
             this.availableTime = Date.now();
         }
-        this.availableTime += (this.calculateDistance(numFloors) + Settings.FLOOR_WAITING) * Settings.MILLI_SECOND;
+        this.availableTime += (this.calculateDistance(targetFloor) + Settings.FLOOR_WAITING) * Settings.MILLI_SECOND;
     }
 
     /**
      * Calculates the distance (in terms of time) to travel to the specified floor.
      * 
-     * @param numFloors - The target floor.
+     * @param targetFloor - The target floor.
      * @returns The calculated distance.
      */
-    calculateDistance = (numFloors: number): number => {
-        const distance = Math.abs((numFloors - this.currentFloor) / Settings.FLOOR_WAITING);
+    calculateDistance = (targetFloor: number): number => {
+        const distance = Math.abs((targetFloor - this.currentFloor) / Settings.FLOOR_WAITING);
         return distance;
     }
 
     /**
      * Calculates the time needed to arrive at the specified floor.
      * 
-     * @param numFloors - The target floor.
+     * @param targetFloor - The target floor.
      * @returns The time needed to arrive at the target floor.
      */
-    timeComingFloor(numFloors: number): number {
+    timeComingFloor(targetFloor: number): number {
         let time_coming: number = this.getWaitingTime();
-        time_coming += this.calculateDistance(numFloors);
+        time_coming += this.calculateDistance(targetFloor);
         return time_coming;
     }
 }
