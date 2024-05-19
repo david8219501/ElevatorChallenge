@@ -78,7 +78,6 @@ class Buildings {
                 index = i;
             }
         }
-
         return index;
     }
 
