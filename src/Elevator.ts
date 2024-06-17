@@ -6,7 +6,7 @@ import { Settings } from "./Settings";
 export class Elevator {
     private currentFloor: number;
     private availableTime: number;
-    elevatorImg: HTMLImageElement;
+    public elevatorImg: HTMLImageElement;
 
     /**
      * Constructs an Elevator object.
