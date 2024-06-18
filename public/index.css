@@ -21,7 +21,7 @@
   margin-right: 10%;
 }
 
-.floorBuildings {
+.floorBuilding {
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;

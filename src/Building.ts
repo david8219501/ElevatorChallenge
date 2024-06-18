@@ -4,17 +4,17 @@ import { FactoryElevators } from './factorys/FactoryElevators';
 import { FactoryFloors } from './factorys/FactoryFloors';
 
 /**
- * Buildings - A class representing a building with floors and elevators.
+ * Building - A class representing a building with floors and elevators.
  */
-class Buildings {
+export class Building {
     private floors: Floor[];
     private elevators: Elevator[];
     private screen: HTMLDivElement | null;
-    private floorBuildings: HTMLDivElement;
+    private floorBuilding: HTMLDivElement;
     private building: HTMLDivElement;
 
     /**
-     * Constructs a Buildings object with the specified number of floors and elevators.
+     * Constructs a Building object with the specified number of floors and elevators.
      * 
      * @param numFloors - The number of floors in the building.
      * @param numElevators - The number of elevators in the building.
@@ -22,20 +22,19 @@ class Buildings {
     constructor(numFloors: number, numElevators: number) {
         this.floors = [];
         this.elevators = [];
-        this.floorBuildings = document.createElement("div");
-        this.floorBuildings.className = "floorBuildings";
+        this.floorBuilding = document.createElement("div");
+        this.floorBuilding.className = "floorBuilding";
         this.building = document.createElement("div");
         this.building.className = "building";
 
         const screen = document.getElementById('screen');
         if (screen) {
             this.screen = screen as HTMLDivElement;
-            this.screen.appendChild(this.floorBuildings);
 
             for (let i = 0; i < numFloors; i++) {
                 const floorInstance = FactoryFloors.createFloors(i, this.sendElevator);
                 this.floors.push(floorInstance);
-                this.floorBuildings.appendChild(floorInstance.floorContainer);
+                this.floorBuilding.appendChild(floorInstance.floorContainer);
 
                 if (i < numFloors - 1) {
                     const blackLine = document.createElement("div");
@@ -44,7 +43,7 @@ class Buildings {
                 }
             }
 
-            this.building.appendChild(this.floorBuildings);
+            this.building.appendChild(this.floorBuilding);
 
             if (numFloors > 1) {
                 for (let i = 0; i < numElevators; i++) {
@@ -54,7 +53,7 @@ class Buildings {
                 }
             }
 
-            screen.appendChild(this.building);
+            this.screen.appendChild(this.building);
         } else {
             this.screen = null;
             console.error("Element with id 'screen' not found!");
@@ -96,7 +95,5 @@ class Buildings {
     }
 }
 
-// Creating instances of Buildings with different numbers of floors and elevators.
-const y = new Buildings(20, 3);
-const z = new Buildings(15, 4);
+
 
