@@ -25,14 +25,4 @@ export class Settings {
 
     /** The time in seconds for the elevator to travel between floors. */
     static readonly ELEVATOR_TRAVEL_TIME_SECONDS = 0.5;
-
-    static readonly NUM_ELEVATORS = 6;
-
-    static readonly NUM_FLOORS = 10;
-
-    static readonly NUM_BUILDINGS = 2;
-
-
-
-
 }

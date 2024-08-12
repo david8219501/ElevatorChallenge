@@ -1,12 +1,10 @@
 import { Building } from './Building';
-import { Settings } from "./Settings";
 
 class BuildingManager {
     constructor() {
-        for(let i = 0; i < Settings.NUM_BUILDINGS; ++i){
-            new Building(Settings.NUM_FLOORS*(i+1), Settings.NUM_ELEVATORS*(i+1));
-        }
-
+        new Building(7, 2);
+        new Building(12, 3);
+        new Building(1, 4);
     }
 }
 
