@@ -7,7 +7,6 @@ import { FactoryFloors } from './factorys/FactoryFloors';
  * Building - A class representing a building with floors and elevators.
  */
 export class Building {
-    private floors: Floor[];
     private elevators: Elevator[];
     private screen: HTMLDivElement | null;
     private floorBuilding: HTMLDivElement;
@@ -20,7 +19,6 @@ export class Building {
      * @param numElevators - The number of elevators in the building.
      */
     constructor(numFloors: number, numElevators: number) {
-        this.floors = [];
         this.elevators = [];
         this.floorBuilding = document.createElement("div");
         this.floorBuilding.className = "floorBuilding";
@@ -33,7 +31,6 @@ export class Building {
 
             for (let i = 0; i < numFloors; i++) {
                 const floorInstance = FactoryFloors.createFloors(i, this.sendElevator);
-                this.floors.push(floorInstance);
                 this.floorBuilding.appendChild(floorInstance.floorContainer);
 
                 if (i < numFloors - 1) {
@@ -87,11 +84,11 @@ export class Building {
      * @param currentFloor - The current floor object requesting the elevator.
      */
     private sendElevator = (numFloors: number, currentFloor: Floor): void => {
-        const index = this.getClosestElevator(numFloors);
-        const timeComing = this.elevators[index].timeComingFloor(numFloors);
-        currentFloor.displayTimer(timeComing);
-        currentFloor.processElevatorArrival(timeComing);
-        this.elevators[index].moveElevator(numFloors);
+            const index = this.getClosestElevator(numFloors);
+            const timeComing = this.elevators[index].timeComingFloor(numFloors);
+            currentFloor.displayTimer(timeComing);
+            currentFloor.processElevatorArrival(timeComing);
+            this.elevators[index].moveElevator(numFloors);
     }
 }
 

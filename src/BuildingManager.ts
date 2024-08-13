@@ -2,9 +2,9 @@ import { Building } from './Building';
 
 class BuildingManager {
     constructor() {
-        new Building(7, 2);
-        new Building(12, 3);
-        new Building(1, 4);
+        new Building(6, 1);
+        new Building(11, 2);
+        new Building(16, 3);
     }
 }
 
