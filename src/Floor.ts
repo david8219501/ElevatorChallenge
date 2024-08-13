@@ -30,7 +30,7 @@ export class Floor {
         this.elevatorSound = new Audio(Settings.ELEVATOR_SOUND_FILE);
 
         this.floorButton.onclick = () => {
-            if (this.isButtonClicked) {
+            if (this.isButtonClicked && numFloor > 1) {
                 this.floorButton.style.color = Settings.BUTTON_CLICKED_COLOR;
                 requestElevator(numFloor, this);
                 this.isButtonClicked = false;
@@ -43,7 +43,7 @@ export class Floor {
  * 
  * @param elevatorArrivalTime - The time in seconds until the elevator arrives.
  */
-processElevatorArrival(elevatorArrivalTime: number): void {
+    processElevatorArrival(elevatorArrivalTime: number): void {
     /**
      * Resets the button color to the original color and plays the elevator sound When the elevator reaches the floor.
      */
