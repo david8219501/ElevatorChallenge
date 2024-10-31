@@ -30,7 +30,7 @@ export class Floor {
         this.elevatorSound = new Audio(Settings.ELEVATOR_SOUND_FILE);
 
         this.floorButton.onclick = () => {
-            if (this.isButtonClicked && numFloor > 1) {
+            if (this.isButtonClicked) {
                 this.floorButton.style.color = Settings.BUTTON_CLICKED_COLOR;
                 requestElevator(numFloor, this);
                 this.isButtonClicked = false;
