@@ -46,7 +46,7 @@ export class Building {
                 for (let i = 0; i < numElevators; i++) {
                     const elevatorInstance = FactoryElevators.createElevators();
                     this.elevators.push(elevatorInstance);
-                    this.building.appendChild(elevatorInstance.elevatorImg);
+                    this.building.appendChild(elevatorInstance.elevatorImageElement);
                 }
             }
 

@@ -6,7 +6,7 @@ import { Settings } from "./Settings";
 export class Elevator {
     private currentFloor: number;
     private availableTime: number;
-    public elevatorImg: HTMLImageElement;
+    public elevatorImageElement: HTMLImageElement;
 
     /**
      * Constructs an Elevator object.
@@ -14,9 +14,9 @@ export class Elevator {
     constructor() {
         this.availableTime = Date.now();
         this.currentFloor = 0;
-        this.elevatorImg = document.createElement("img");
-        this.elevatorImg.src = 'elv.png';
-        this.elevatorImg.className = "elevator";
+        this.elevatorImageElement = document.createElement("img");
+        this.elevatorImageElement.src = 'elv.png';
+        this.elevatorImageElement.className = "elevator";
     }
 
     /**
@@ -25,14 +25,14 @@ export class Elevator {
      * @param targetFloor - The floor to move the elevator to.
      */
     moveElevator(targetFloor: number): void {
-        const free_elevator: number = this.getWaitingTime() * Settings.MILLI_SECOND;
-        const distance: number = this.calculateDistance(targetFloor);
+        const delayBeforeMoveMs: number = this.getRemainingWaitTimeSec() * Settings.MILLI_SECOND;
+        const travelDurationSec: number = this.calculateDistance(targetFloor);
         setTimeout(() => {
             // Apply transition effect to smoothly move the elevator
-            this.elevatorImg.style.transition = `transform ${distance}s ease`;
+            this.elevatorImageElement.style.transition = `transform ${travelDurationSec}s ease`;
             // Move the elevator to the target floor
-            this.elevatorImg.style.transform = `translateY(${(-targetFloor * Settings.FLOOR_HEIGHT) + Settings.BLACK_LINE_HEIGHT}px)`;
-        }, free_elevator);
+            this.elevatorImageElement.style.transform = `translateY(${(-targetFloor * Settings.FLOOR_HEIGHT) + Settings.BLACK_LINE_HEIGHT}px)`;
+        }, delayBeforeMoveMs);
         this.updateAvailableTime(targetFloor);
         this.currentFloor = targetFloor;
     }
@@ -52,7 +52,7 @@ export class Elevator {
      * 
      * @returns The waiting time in milliseconds.
      */
-    getWaitingTime = (): number => {
+    getRemainingWaitTimeSec = (): number => {
         let free_time: number = 0;
         if (!this.isElevatorAvailable()) {
             free_time = (this.availableTime - Date.now()) / Settings.MILLI_SECOND;
@@ -90,7 +90,7 @@ export class Elevator {
      * @returns The time needed to arrive at the target floor.
      */
     timeComingFloor(targetFloor: number): number {
-        let time_coming: number = this.getWaitingTime();
+        let time_coming: number = this.getRemainingWaitTimeSec();
         time_coming += this.calculateDistance(targetFloor);
         return time_coming;
     }
