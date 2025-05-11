@@ -4,87 +4,85 @@ import { Settings } from './Settings';
  * Floor - A class representing a floor in a building.
  */
 export class Floor {
-    private floorButton: HTMLButtonElement;
-    private isButtonClicked: boolean;
-    private elevatorSound: HTMLAudioElement;
-    private timerDisplay: HTMLDivElement;
-    public floorContainer: HTMLDivElement;
+    private callButton: HTMLButtonElement;
+    private isCallAllowed: boolean;
+    private arrivalSound: HTMLAudioElement;
+    private countdownElement: HTMLDivElement;
+    public floorElement: HTMLDivElement;
 
     /**
      * Constructs a Floor object.
      * 
-     * @param numFloors - The floor number.
-     * @param requestElevator - A function to request an elevator.
+     * @param floorNumber - The floor number.
+     * @param elevatorRequest - A function to request an elevator.
      */
-    constructor(numFloor: number, requestElevator: (numFloors: number, currentFloor: Floor) => void) {
-        this.floorContainer = document.createElement("div");
-        this.floorContainer.className = "floor";
-        this.floorButton = document.createElement("button");
-        this.floorButton.className = "metal linear";
-        this.floorButton.textContent = numFloor.toString();
-        this.floorContainer.appendChild(this.floorButton);
-        this.timerDisplay = document.createElement("div");
-        this.timerDisplay.className = "timer";
-        this.floorContainer.appendChild(this.timerDisplay);
-        this.isButtonClicked = true;
-        this.elevatorSound = new Audio(Settings.ELEVATOR_SOUND_FILE);
+    constructor(floorNumber: number, elevatorRequest: (floorNumber: number, floor: Floor) => void) {
+        this.floorElement = document.createElement("div");
+        this.floorElement.className = "floor";
 
-        this.floorButton.onclick = () => {
-            if (this.isButtonClicked) {
-                this.floorButton.style.color = Settings.BUTTON_CLICKED_COLOR;
-                requestElevator(numFloor, this);
-                this.isButtonClicked = false;
+        this.callButton = document.createElement("button");
+        this.callButton.className = "metal linear";
+        this.callButton.textContent = floorNumber.toString();
+        this.floorElement.appendChild(this.callButton);
+
+        this.countdownElement = document.createElement("div");
+        this.countdownElement.className = "timer";
+        this.floorElement.appendChild(this.countdownElement);
+
+        this.isCallAllowed = true;
+
+        this.arrivalSound = new Audio(Settings.ELEVATOR_SOUND_FILE);
+
+        this.callButton.onclick = () => {
+            if (this.isCallAllowed) {
+                this.callButton.style.color = Settings.BUTTON_CLICKED_COLOR;
+                elevatorRequest(floorNumber, this);
+                this.isCallAllowed = false;
             }
         };
     }
 
     /**
- * Processes the elevator's arrival at the floor.
- * 
- * @param elevatorArrivalTime - The time in seconds until the elevator arrives.
- */
-    processElevatorArrival(elevatorArrivalTime: number): void {
-    /**
-     * Resets the button color to the original color and plays the elevator sound When the elevator reaches the floor.
-     */
-    setTimeout(() => {
-        this.floorButton.style.color = Settings.BUTTON_COLOR;
-        this.playElevatorSound();
-    }, elevatorArrivalTime * Settings.MILLI_SECOND);
-
-    /**
-     * Sets the button click state since the elevator is at the floor and stops its sound playback After waiting two seconds.
-     */
-    setTimeout(() => {
-        this.isButtonClicked = true;
-        this.elevatorSound.pause();
-        this.elevatorSound.currentTime = 0;
-    }, (elevatorArrivalTime + Settings.FLOOR_WAITING) * Settings.MILLI_SECOND);
-}
-
-
-    /**
-     * Displays a countdown timer showing the time until the elevator arrives.
+     * Handles elevator arrival: updates button, plays sound, and resets state.
      * 
-     * @param time - The time in seconds until the elevator arrives.
+     * @param arrivalTimeSec - Time in seconds until elevator arrives.
      */
-    displayTimer(time: number): void {
-        let intervalId = setInterval(() => {
-            if (time <= 0) {
-                clearInterval(intervalId);
-                this.timerDisplay.textContent = "";
-            } else {
-                const displayTime = Math.trunc(time);
-                this.timerDisplay.textContent = displayTime.toString();
-                time -= 0.1;
-            }
-        }, 100);
+    processElevatorArrival(arrivalTimeSec: number): void {
+        // Restore button color and play sound when elevator arrives
+        setTimeout(() => {
+            this.callButton.style.color = Settings.BUTTON_COLOR;
+            this.playArrivalSound();
+        }, arrivalTimeSec * Settings.MILLI_SECOND);
+
+        // Allow button to be clicked again and stop sound after delay
+        setTimeout(() => {
+            this.isCallAllowed = true;
+            this.arrivalSound.pause();
+            this.arrivalSound.currentTime = 0;
+        }, (arrivalTimeSec + Settings.FLOOR_WAITING) * Settings.MILLI_SECOND);
     }
 
     /**
-     * Plays the elevator sound.
+     * Displays a countdown timer for elevator arrival.
+     * 
+     * @param secondsUntilArrival - Time in seconds until arrival.
      */
-    private playElevatorSound(): void {
-        this.elevatorSound.play();
+    displayTimer(secondsUntilArrival: number): void {
+        let timerId = setInterval(() => {
+            if (secondsUntilArrival <= 0) {
+                clearInterval(timerId);
+                this.countdownElement.textContent = "";
+            } else {
+                this.countdownElement.textContent = Math.trunc(secondsUntilArrival).toString();
+                secondsUntilArrival -= 0.1;
+            }
+        }, 1000);
+    }
+
+    /**
+     * Plays the elevator arrival sound.
+     */
+    private playArrivalSound(): void {
+        this.arrivalSound.play();
     }
 }
