@@ -31,11 +31,11 @@ export class Floor {
 
         this.isCallAllowed = true;
 
-        this.arrivalSound = new Audio(Settings.ELEVATOR_SOUND_FILE);
+        this.arrivalSound = new Audio(Settings.ELEVATOR_DING_SOUND_PATH);
 
         this.callButton.onclick = () => {
             if (this.isCallAllowed) {
-                this.callButton.style.color = Settings.BUTTON_CLICKED_COLOR;
+                this.callButton.style.color = Settings.FLOOR_BUTTON_ACTIVE_COLOR;
                 elevatorRequest(floorNumber, this);
                 this.isCallAllowed = false;
             }
@@ -50,16 +50,16 @@ export class Floor {
     processElevatorArrival(arrivalTimeSec: number): void {
         // Restore button color and play sound when elevator arrives
         setTimeout(() => {
-            this.callButton.style.color = Settings.BUTTON_COLOR;
+            this.callButton.style.color = Settings.FLOOR_BUTTON_DEFAULT_COLOR;
             this.playArrivalSound();
-        }, arrivalTimeSec * Settings.MILLI_SECOND);
+        }, arrivalTimeSec * Settings.SEC_TO_MS);
 
         // Allow button to be clicked again and stop sound after delay
         setTimeout(() => {
             this.isCallAllowed = true;
             this.arrivalSound.pause();
             this.arrivalSound.currentTime = 0;
-        }, (arrivalTimeSec + Settings.FLOOR_WAITING) * Settings.MILLI_SECOND);
+        }, (arrivalTimeSec + Settings.ELEVATOR_WAIT_TIME_SEC) * Settings.SEC_TO_MS);
     }
 
     /**
@@ -76,7 +76,7 @@ export class Floor {
                 this.countdownElement.textContent = Math.trunc(secondsUntilArrival).toString();
                 secondsUntilArrival -= 0.1;
             }
-        }, 1000);
+        }, 100);
     }
 
     /**

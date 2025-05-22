@@ -3,26 +3,26 @@
  */
 export class Settings {
     /** Height of each floor in pixels. */
-    static readonly FLOOR_HEIGHT = 110; 
+    static readonly FLOOR_HEIGHT_PX = 110; // הוספתי _PX להבהרת היחידות
 
-    /** Waiting time in seconds for the elevator to stay at a floor. */
-    static readonly FLOOR_WAITING = 2; 
+    /** Time the elevator waits at a floor, in seconds. */
+    static readonly ELEVATOR_WAIT_TIME_SEC = 2; // שם ברור יותר למה ממתינים
 
     /** Conversion factor from seconds to milliseconds. */
-    static readonly MILLI_SECOND = 1000; 
+    static readonly SEC_TO_MS = 1000; // מדויק יותר מהשם הכללי MILLI_SECOND
 
     /** Default color of the floor button. */
-    static readonly BUTTON_COLOR = "hsla(0,0%,20%,1)"; 
+    static readonly FLOOR_BUTTON_DEFAULT_COLOR = "hsla(0,0%,20%,1)"; // עקביות
 
     /** Color of the floor button when clicked. */
-    static readonly BUTTON_CLICKED_COLOR = "green"; 
+    static readonly FLOOR_BUTTON_ACTIVE_COLOR = "green"; // מתאים למצב לחיצה
 
     /** File path to the elevator sound effect. */
-    static readonly ELEVATOR_SOUND_FILE = 'ding.mp3'; 
+    static readonly ELEVATOR_DING_SOUND_PATH = 'ding.mp3'; // מתאר גם מה הסאונד
 
     /** Height of the black line between floors in pixels. */
-    static readonly BLACK_LINE_HEIGHT = 7; 
+    static readonly FLOOR_SEPARATOR_HEIGHT_PX = 7; // שם יותר אינפורמטיבי
 
-    /** The time in seconds for the elevator to travel between floors. */
-    static readonly ELEVATOR_TRAVEL_TIME_SECONDS = 0.5;
+    /** Time for elevator to move between floors, in seconds. */
+    static readonly ELEVATOR_MOVE_DURATION_SEC = 0.5; // תיאור עקבי וברור
 }

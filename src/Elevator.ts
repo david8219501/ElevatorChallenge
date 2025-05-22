@@ -25,13 +25,13 @@ export class Elevator {
      * @param targetFloor - The floor to move the elevator to.
      */
     moveElevator(targetFloor: number): void {
-        const delayBeforeMoveMs: number = this.getRemainingWaitTimeSec() * Settings.MILLI_SECOND;
+        const delayBeforeMoveMs: number = this.getRemainingWaitTimeSec() * Settings.SEC_TO_MS;
         const travelDurationSec: number = this.calculateDistance(targetFloor);
         setTimeout(() => {
             // Apply transition effect to smoothly move the elevator
             this.elevatorImageElement.style.transition = `transform ${travelDurationSec}s ease`;
             // Move the elevator to the target floor
-            this.elevatorImageElement.style.transform = `translateY(${(-targetFloor * Settings.FLOOR_HEIGHT) + Settings.BLACK_LINE_HEIGHT}px)`;
+            this.elevatorImageElement.style.transform = `translateY(${(-targetFloor * Settings.FLOOR_HEIGHT_PX) + Settings.FLOOR_SEPARATOR_HEIGHT_PX}px)`;
         }, delayBeforeMoveMs);
         this.updateAvailableTime(targetFloor);
         this.currentFloor = targetFloor;
@@ -55,7 +55,7 @@ export class Elevator {
     getRemainingWaitTimeSec = (): number => {
         let free_time: number = 0;
         if (!this.isElevatorAvailable()) {
-            free_time = (this.availableTime - Date.now()) / Settings.MILLI_SECOND;
+            free_time = (this.availableTime - Date.now()) / Settings.SEC_TO_MS;
         }
         return free_time;
     }
@@ -69,7 +69,7 @@ export class Elevator {
         if (this.isElevatorAvailable()) {
             this.availableTime = Date.now();
         }
-        this.availableTime += (this.calculateDistance(targetFloor) + Settings.FLOOR_WAITING) * Settings.MILLI_SECOND;
+        this.availableTime += (this.calculateDistance(targetFloor) + Settings.ELEVATOR_WAIT_TIME_SEC) * Settings.SEC_TO_MS;
     }
 
     /**
@@ -79,7 +79,7 @@ export class Elevator {
      * @returns The calculated distance.
      */
     calculateDistance = (targetFloor: number): number => {
-        const distance = Math.abs((targetFloor - this.currentFloor) * Settings.ELEVATOR_TRAVEL_TIME_SECONDS);
+        const distance = Math.abs((targetFloor - this.currentFloor) * Settings.ELEVATOR_MOVE_DURATION_SEC);
         return distance;
     }
 

@@ -1,96 +1,91 @@
 import type { Floor } from "./Floor";
 import type { Elevator } from './Elevator';
-import { FactoryElevators } from './factorys/FactoryElevators';
-import { FactoryFloors } from './factorys/FactoryFloors';
+import { ElevatorFactory } from './factorys/ElevatorFactory';
+import { FloorFactory } from './factorys/FloorFactory';
 
 /**
  * Building - A class representing a building with floors and elevators.
  */
 export class Building {
-    private elevators: Elevator[];
-    private screen: HTMLDivElement | null;
-    private floorBuilding: HTMLDivElement;
-    private building: HTMLDivElement;
+    private elevatorList: Elevator[];
+    private screenElement: HTMLDivElement | null;
+    private floorContainer: HTMLDivElement;
+    private buildingContainer: HTMLDivElement;
 
     /**
      * Constructs a Building object with the specified number of floors and elevators.
      * 
-     * @param numFloors - The number of floors in the building.
-     * @param numElevators - The number of elevators in the building.
+     * @param totalFloors - Total number of floors in the building.
+     * @param totalElevators - Total number of elevators in the building.
      */
-    constructor(numFloors: number, numElevators: number) {
-        this.elevators = [];
-        this.floorBuilding = document.createElement("div");
-        this.floorBuilding.className = "floorBuilding";
-        this.building = document.createElement("div");
-        this.building.className = "building";
+    constructor(totalFloors: number, totalElevators: number) {
+        this.elevatorList = [];
+        this.floorContainer = document.createElement("div");
+        this.floorContainer.className = "floorBuilding";
+        this.buildingContainer = document.createElement("div");
+        this.buildingContainer.className = "building";
 
         const screen = document.getElementById('screen');
         if (screen) {
-            this.screen = screen as HTMLDivElement;
+            this.screenElement = screen as HTMLDivElement;
 
-            for (let i = 0; i < numFloors; i++) {
-                const floorInstance = FactoryFloors.createFloors(i, this.sendElevator);
-                this.floorBuilding.appendChild(floorInstance.floorContainer);
+            for (let floorIndex = 0; floorIndex < totalFloors; floorIndex++) {
+                const floorInstance = FloorFactory.createFloor(floorIndex, this.handleElevatorRequest);
+                this.floorContainer.appendChild(floorInstance.floorElement);
 
-                if (i < numFloors - 1) {
-                    const blackLine = document.createElement("div");
-                    blackLine.className = "blackLine";
-                    floorInstance.floorContainer.appendChild(blackLine);
+                if (floorIndex < totalFloors - 1) {
+                    const floorSeparator = document.createElement("div");
+                    floorSeparator.className = "blackLine";
+                    floorInstance.floorElement.appendChild(floorSeparator);
                 }
             }
 
-            this.building.appendChild(this.floorBuilding);
+            this.buildingContainer.appendChild(this.floorContainer);
 
-            if (numFloors > 1) {
-                for (let i = 0; i < numElevators; i++) {
-                    const elevatorInstance = FactoryElevators.createElevators();
-                    this.elevators.push(elevatorInstance);
-                    this.building.appendChild(elevatorInstance.elevatorImageElement);
-                }
+            for (let i = 0; i < totalElevators; i++) {
+                const elevatorInstance = ElevatorFactory.createElevator();
+                this.elevatorList.push(elevatorInstance);
+                this.buildingContainer.appendChild(elevatorInstance.elevatorImageElement);
             }
 
-            this.screen.appendChild(this.building);
+            this.screenElement.appendChild(this.buildingContainer);
         } else {
-            this.screen = null;
+            this.screenElement = null;
             console.error("Element with id 'screen' not found!");
         }
     }
 
     /**
-     * Finds the closest elevator to the specified floor.
+     * Returns the index of the elevator closest (in time) to the requested floor.
      * 
-     * @param floorToMove - The floor to move the elevator to.
-     * @returns The index of the closest elevator.
+     * @param targetFloor - Floor number requesting the elevator.
      */
-    private getClosestElevator = (floorToMove: number): number => {
-        let minTimeComing = this.elevators[0].timeComingFloor(floorToMove);
-        let index = 0;
+    private findClosestElevator = (targetFloor: number): number => {
+        let minArrivalTime = this.elevatorList[0].timeComingFloor(targetFloor);
+        let closestElevatorIndex = 0;
 
-        for (let i = 1; i < this.elevators.length; i++) {
-            const timeComming = this.elevators[i].timeComingFloor(floorToMove);
-            if (timeComming < minTimeComing) {
-                minTimeComing = timeComming;
-                index = i;
+        for (let i = 1; i < this.elevatorList.length; i++) {
+            const arrivalTime = this.elevatorList[i].timeComingFloor(targetFloor);
+            if (arrivalTime < minArrivalTime) {
+                minArrivalTime = arrivalTime;
+                closestElevatorIndex = i;
             }
         }
-        return index;
+        return closestElevatorIndex;
     }
 
     /**
-     * Sends the closest elevator to the specified floor.
+     * Handles elevator request and sends the closest elevator.
      * 
-     * @param numFloors - The number of floors in the building.
-     * @param currentFloor - The current floor object requesting the elevator.
+     * @param targetFloorNumber - The floor number that requested the elevator.
+     * @param floorInstance - The floor instance requesting the elevator.
      */
-    private sendElevator = (numFloors: number, currentFloor: Floor): void => {
-            const index = this.getClosestElevator(numFloors);
-            const timeComing = this.elevators[index].timeComingFloor(numFloors);
-            currentFloor.displayTimer(timeComing);
-            currentFloor.processElevatorArrival(timeComing);
-            this.elevators[index].moveElevator(numFloors);
+    private handleElevatorRequest = (targetFloorNumber: number, floorInstance: Floor): void => {
+        const elevatorIndex = this.findClosestElevator(targetFloorNumber);
+        const arrivalTime = this.elevatorList[elevatorIndex].timeComingFloor(targetFloorNumber);
+        
+        floorInstance.displayTimer(arrivalTime);
+        floorInstance.processElevatorArrival(arrivalTime);
+        this.elevatorList[elevatorIndex].moveElevator(targetFloorNumber);
     }
 }
-
-
-
